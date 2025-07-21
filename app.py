@@ -2,12 +2,14 @@ from flask import Flask, request, jsonify
 import joblib
 import pandas as pd
 import os
+from flask_cors import CORS  # 👈 NUEVO
 
 # Cargar modelo entrenado
 modelo = joblib.load('modelo_random_forest.pkl')
 
 # Crear app Flask
 app = Flask(__name__)
+CORS(app)  # 👈 NUEVO: permite peticiones desde otras URLs como localhost:5000
 
 @app.route('/')
 def home():
@@ -35,5 +37,5 @@ def predecir():
         return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 8080))  # Usa 8080 como puerto por defecto
+    port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
